@@ -35,7 +35,8 @@ const RESPONSE_MESSAGES = {
     ADMIN_UPDATED: 'Admin updated',
     USER_NOT_FOUND: 'User not found',
     INVALID_CREDENTIALS: 'Id or password did not match',
-    NO_IMAGE_UPLOADED: 'No image uploaded'
+    NO_IMAGE_UPLOADED: 'No image uploaded',
+    NO_IMAGE_FOUND: 'No image found'
 };
 
 module.exports = {
