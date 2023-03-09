@@ -11,13 +11,17 @@ const imageSchema = new mongoose.Schema({
             required: true
         },
         likedBy: {
-            type: String,
-            required: false
+            type: Array,
+            default: []
         },
-        comment: [{
-            commentBy: String,
-            text: String,
-        }]
+        likes: {
+            type: Number,
+            default: 0
+        },
+        comment: {
+            type: Array,
+            default: []
+        }
     }],
     uploader: {
         type: String,

@@ -10,6 +10,9 @@ router
     .post('/uploadimage', verifyToken, upload.single('image'), ImagesController.uploadImage)
     .get('/getallimages', ImagesController.getAllImages)
     .get('/getimage/:id', ImagesController.getImageById)
-    .get('/getimage/:userid', ImagesController.getImageByUserId)
+    .get('/getimages/:userid', ImagesController.getImageByUserId)
+    .delete('/deleteimage', verifyToken, ImagesController.deleteImage)
+    .post('/likeimage', verifyToken, ImagesController.likeImage)
+    .post('/commentonimage', verifyToken, ImagesController.commentOnImage)
 
 module.exports = router;

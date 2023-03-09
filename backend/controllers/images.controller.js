@@ -70,7 +70,7 @@ exports.getAllImages = async (req, res) => {
         } else {
             return res.status(RESPONSE_STATUS.ERROR).json({
                 response: RESPONSES.ERROR,
-                message: RESPONSES.NO_IMAGE_FOUND,
+                message: RESPONSE_MESSAGES.NO_IMAGE_FOUND,
             });
         }
     } catch (err) {
@@ -101,7 +101,7 @@ exports.getImageById = async (req, res) => {
         } else {
             return res.status(RESPONSE_STATUS.ERROR).json({
                 response: RESPONSES.ERROR,
-                message: RESPONSES.NO_IMAGE_FOUND,
+                message: RESPONSE_MESSAGES.NO_IMAGE_FOUND,
             });
         }
 
@@ -118,19 +118,160 @@ exports.getImageById = async (req, res) => {
 exports.getImageByUserId = async (req, res) => {
     try {
         const { userid } = req.params;
+        const images = await Image.findOne({ uploader: userid });
+        if (!images) {
+            return res.status(RESPONSE_STATUS.ERROR).json({
+                response: RESPONSES.ERROR,
+                message: RESPONSE_MESSAGES.NO_IMAGE_FOUND,
+            });
+        }
+        return res.status(RESPONSE_STATUS.SUCCESS).json({
+            response: RESPONSES.SUCCESS,
+            message: RESPONSE_MESSAGES.SUCCESS,
+            data: images
+        });
     } catch (err) {
-
+        console.log(err);
+        return res.status(RESPONSE_STATUS.ERROR).json({
+            response: RESPONSES.ERROR,
+            message: err,
+        });
     }
 }
 
+// and admin and moderator
 exports.deleteImage = async (req, res) => {
-
+    try {
+        const { uploader, id } = req.body;
+        if (!id || !uploader) {
+            return res.status(RESPONSE_STATUS.ERROR).json({
+                response: RESPONSES.ERROR,
+                message: RESPONSE_MESSAGES.MISSING_FIELDS
+            });
+        }
+        const foundImg = await Image.findOne({ "image._id": id });
+        if (foundImg.uploader === uploader) {
+            await Image.updateOne({ "image._id": id }, {
+                $pull: {
+                    image: { _id: id }
+                }
+            });
+            return res.status(RESPONSE_STATUS.SUCCESS).json({
+                response: RESPONSES.SUCCESS,
+                message: RESPONSE_MESSAGES.SUCCESS,
+            });
+        } else {
+            return res.status(RESPONSE_STATUS.ERROR).json({
+                response: RESPONSES.ERROR,
+                message: RESPONSE_MESSAGES.NOT_ENOUGH_PRIVILEGES,
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        return res.status(RESPONSE_STATUS.ERROR).json({
+            response: RESPONSES.ERROR,
+            message: err,
+        });
+    }
 }
 
 exports.likeImage = async (req, res) => {
+    try {
+        const { id, user } = req.body;
+        if (!id || !user) {
+            return res.status(RESPONSE_STATUS.ERROR).json({
+                response: RESPONSES.ERROR,
+                message: RESPONSE_MESSAGES.MISSING_FIELDS
+            });
+        }
+        const foundImg = await Image.findOne({ "image._id": id });
 
+        let likes = null;
+        let currentElement = null;
+        for (let i = 0; i < foundImg.image.length; i++) {
+            if (foundImg.image[i]._id.toString() === id) {
+                likes = foundImg.image[i].likes;
+                currentElement = foundImg.image[i];
+                break;
+            }
+        }
+        currentElement.likes += 1;
+
+        if (currentElement.likedBy.indexOf(user) !== -1) {
+            return res.status(RESPONSE_STATUS.ERROR).json({
+                response: RESPONSES.ERROR,
+                message: RESPONSE_MESSAGES.IMAGE_ALREADY_LIKED,
+            });
+        }
+        currentElement.likedBy.push(user);
+
+        if (likes !== null) {
+            await Image.updateOne({ "image._id": id }, {
+                $pull: {
+                    image: { _id: id }
+                }
+            });
+            await Image.updateOne({ uploader: foundImg.uploader }, {
+                $push: {
+                    image: currentElement
+                }
+            });
+
+            return res.status(RESPONSE_STATUS.SUCCESS).json({
+                response: RESPONSES.SUCCESS,
+                message: RESPONSE_MESSAGES.SUCCESS,
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        return res.status(RESPONSE_STATUS.ERROR).json({
+            response: RESPONSES.ERROR,
+            message: err,
+        });
+    }
 }
 
 exports.commentOnImage = async (req, res) => {
+    try {
+        const { id, comment } = req.body;
+        if (!id || !comment) {
+            return res.status(RESPONSE_STATUS.ERROR).json({
+                response: RESPONSES.ERROR,
+                message: RESPONSE_MESSAGES.MISSING_FIELDS
+            });
+        }
+        const foundImg = await Image.findOne({ "image._id": id });
 
+        let currentElement = null;
+        for (let i = 0; i < foundImg.image.length; i++) {
+            if (foundImg.image[i]._id.toString() === id) {
+                currentElement = foundImg.image[i];
+                break;
+            }
+        }
+        currentElement.comment.push(comment);
+
+        if (currentElement !== null) {
+            await Image.updateOne({ "image._id": id }, {
+                $pull: {
+                    image: { _id: id }
+                }
+            });
+            await Image.updateOne({ uploader: foundImg.uploader }, {
+                $push: {
+                    image: currentElement
+                }
+            });
+            return res.status(RESPONSE_STATUS.SUCCESS).json({
+                response: RESPONSES.SUCCESS,
+                message: RESPONSE_MESSAGES.SUCCESS,
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        return res.status(RESPONSE_STATUS.ERROR).json({
+            response: RESPONSES.ERROR,
+            message: err,
+        });
+    }
 }

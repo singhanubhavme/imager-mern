@@ -36,7 +36,8 @@ const RESPONSE_MESSAGES = {
     USER_NOT_FOUND: 'User not found',
     INVALID_CREDENTIALS: 'Id or password did not match',
     NO_IMAGE_UPLOADED: 'No image uploaded',
-    NO_IMAGE_FOUND: 'No image found'
+    NO_IMAGE_FOUND: 'No image found',
+    IMAGE_ALREADY_LIKED: 'Image is already liked by this user'
 };
 
 module.exports = {
