@@ -17,6 +17,7 @@ const Image = ({ img, setCommentAdded }) => {
                 alt="gallery"
                 className="block h-full w-full rounded-lg object-cover object-center"
                 src={img.url}
+                loading="lazy"
               />
             </div>
           </div>
