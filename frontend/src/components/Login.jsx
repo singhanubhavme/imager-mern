@@ -32,6 +32,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
         if (response.status === 200) {
           const token = response.data.data.token;
           localStorage.setItem('token', token);
+          localStorage.setItem('username', username);
           showToast('User Logged in Successfully!!', 'success');
           setIsLoggedIn(true);
           setTimeout(() => {

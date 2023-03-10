@@ -1,40 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Image from "./Image";
 import axios from "axios";
-import { PRODUCT_URL, USER_URL } from "../constants";
-import ImageModel from "./ImageModel";
+import { PRODUCT_URL } from "../constants";
 
 const Images = () => {
   const [images, setImages] = useState([]);
+  const [commentAdded, setCommentAdded] = useState(false);
 
-  // async function getImages() {
-  //   const resp = await axios.get('https://api.unsplash.com/photos?page=1', {
-  //     headers: {
-  //       Authorization: "Client-ID vSVoYbP4Ftv0Y61XT7-79utUOFnAmHD_v7oBm6kzWtU",
-  //     }
-  //   })
-  //   const imageUrl = [];
-  //   for (let i = 0; i < resp.data.length; i++) {
-  //     imageUrl.push(resp.data[i].urls.raw);
-  //   }
-  //   setImages(imageUrl);
-  // };
+  useEffect(() => {
+    (async function () {
+      const response = await axios.get(PRODUCT_URL.getallimages);
+      console.log(response);
+      if (response.status === 200) {
+        const img = [];
+        for (let i = 0; i < response.data.data.length; i++) {
+          const data = response.data.data[i];
+          img.push({
+            url: data.url,
+            title: data.title,
+            likes: data.likes,
+            imgId: data._id,
+            comments: data.comment
+          });
+        }
+        setImages(img);
+      } else {
 
-  // useEffect(() => {
-  (async function () {
-    const response = await axios.get(PRODUCT_URL.getallimages);
-    if (response.status === 200) {
-      const imgUrl = [];
-      for (let i = 0; i < response.data.data.length; i++) {
-        imgUrl.push(response.data.data[i].url);
       }
-      setImages(imgUrl);
-    } else {
-
-    }
-  })();
-  // })
-
+      console.log("here");
+    })();
+  }, [commentAdded]);
 
   return (
     <React.Fragment>
@@ -42,12 +37,14 @@ const Images = () => {
         <div className="container mx-auto px-5 py-2 lg:px-32 lg:pt-12">
           <div className="-m-1 flex flex-wrap md:-m-2">
             {
-              images.map((el) => {
+              images.map((img) => {
                 return (
                   <Image
-                    key={el}
-                    url={el}
-                  />)
+                    key={img.url}
+                    img={img}
+                    setCommentAdded={setCommentAdded}
+                  />
+                );
               }
               )
             }
