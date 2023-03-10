@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from "react";
+import ImageModel from "./ImageModel";
 
 const Image = ({ url }) => {
+  const [model, setModel] = useState(false);
+  const handleClick = () => {
+    setModel(true);
+  }
   return (
     <React.Fragment>
-      <div class="flex w-1/3 flex-wrap">
-        <div class="w-full p-1 md:p-2">
-          <img
-            alt="gallery"
-            class="block h-full w-full rounded-lg object-cover object-center"
-            src={url} />
+      {!model ?
+        <div className="flex w-1/3 flex-wrap">
+          <div className="w-full p-1 md:p-2">
+            <img
+              onClick={handleClick}
+              alt="gallery"
+              className="block h-full w-full rounded-lg object-cover object-center"
+              src={url}
+            />
+          </div>
         </div>
-      </div>
-    </React.Fragment>
+        :
+        <ImageModel
+          url={url}
+        />
+      }
+    </React.Fragment >
   )
 };
 
