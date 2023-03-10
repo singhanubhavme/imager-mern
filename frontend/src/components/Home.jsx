@@ -1,8 +1,11 @@
+import React from 'react';
+import Images from './Images';
+
 const Home = () => {
     return (
-        <div>
-            Home
-        </div>
+        <React.Fragment>
+            <Images />
+        </React.Fragment>
     );
 }
 

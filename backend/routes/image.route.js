@@ -18,6 +18,7 @@ router
   .get('/getimages/:userid', ImagesController.getImageByUserId)
   .delete('/deleteimage', verifyToken, ImagesController.deleteImage)
   .post('/likeimage', verifyToken, ImagesController.likeImage)
-  .post('/commentonimage', verifyToken, ImagesController.commentOnImage);
+  .post('/commentonimage', verifyToken, ImagesController.commentOnImage)
+  .post('/getuploader', ImagesController.getUploader);
 
 module.exports = router;
