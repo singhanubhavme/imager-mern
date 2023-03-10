@@ -10,7 +10,7 @@ export const USER_URL = {
   deleteuser: BASE_USER_API + '/deleteuser/',
 };
 
-export const PRODUCT_URL = {
+export const IMAGE_URL = {
   uploadimage: BASE_IMAGE_API + '/uploadimage',
   getallimages: BASE_IMAGE_API + '/getallimages',
   getimage: BASE_IMAGE_API + '/getimage/',

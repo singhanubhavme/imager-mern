@@ -1,22 +1,15 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { LikeIcon } from '../icons/icons';
-import { PRODUCT_URL } from '../constants';
-
+import { IMAGE_URL } from '../constants';
+import { showToast } from '../utils/showToast';
 
 const Like = ({ setLikes, likes, img }) => {
-    const showToast = (text, type) => {
-        toast(text, {
-            position: "top-right",
-            type: type,
-        });
-    };
     const handleLike = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
         const username = localStorage.getItem("username");
         try {
-            const response = await axios.post(PRODUCT_URL.likeimage, {
+            const response = await axios.post(IMAGE_URL.likeimage, {
                 id: img.imgId,
                 user: username
             }, {

@@ -1,6 +1,5 @@
 import { Fragment, useRef, useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { ToastContainer } from 'react-toastify';
 import Comment from './Comment';
 import { CloseIcon } from '../icons/icons';
 import Like from './Like';
@@ -13,7 +12,6 @@ const ImageModel = ({ img, setModel, setCommentAdded }) => {
     useEffect(() => {
         open ? setModel(true) : setModel(false);
     }, [open, setModel]);
-
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -43,7 +41,6 @@ const ImageModel = ({ img, setModel, setCommentAdded }) => {
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
                             <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                                <ToastContainer />
                                 <div className="mx-auto transform overflow-hidden rounded-lg bg-white">
                                     <img className="h-full w-full object-center" src={img.url} loading="lazy" alt="pic" />
 

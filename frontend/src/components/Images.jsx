@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "./Image";
 import axios from "axios";
-import { PRODUCT_URL } from "../constants";
+import { IMAGE_URL } from "../constants";
 
 const Images = () => {
   const [images, setImages] = useState([]);
@@ -9,7 +9,7 @@ const Images = () => {
 
   useEffect(() => {
     (async function () {
-      const response = await axios.get(PRODUCT_URL.getallimages);
+      const response = await axios.get(IMAGE_URL.getallimages);
       console.log(response);
       if (response.status === 200) {
         const img = [];

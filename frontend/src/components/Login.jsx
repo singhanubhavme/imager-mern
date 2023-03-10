@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { USER_URL } from '../constants';
+import { showToast } from '../utils/showToast';
 
 const Login = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  const showToast = (text, type) => {
-    toast(text, {
-      type: type,
-    });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +45,6 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
 
   return (
     <div className="bg-white relative">
-      <ToastContainer />
       <div
         className="flex flex-col items-center justify-between pt-0 pr-10 pb-0 pl-10 mt-0 mr-auto mb-0 ml-auto max-w-7xl
         xl:px-5 lg:flex-row"

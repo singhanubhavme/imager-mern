@@ -1,24 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import { PRODUCT_URL } from "../constants";
+import { IMAGE_URL } from "../constants";
+import { showToast } from '../utils/showToast';
 
 const Comment = ({ imgId, setCommentAdded }) => {
 
     const [comment, setComment] = useState('');
 
-    const showToast = (text, type) => {
-        toast(text, {
-            position: "bottom-right",
-            type: type,
-        });
-    };
-
     const submitComment = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.post(PRODUCT_URL.commentonimage, {
+            const response = await axios.post(IMAGE_URL.commentonimage, {
                 id: imgId,
                 comment: comment
             }, {
@@ -34,12 +27,10 @@ const Comment = ({ imgId, setCommentAdded }) => {
             }
         } catch (err) {
             showToast('Cannot add comment', 'fail');
-
         }
     }
     return (
         <div className="flex items-center justify-center shadow-lg mt-2 mb-2 w-full">
-            <ToastContainer />
             <form className="w-full max-w-xl bg-white rounded-lg px-4 pt-2">
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <h2 className="px-4 pt-3 pb-2 text-gray-800 text-lg">Add a new comment</h2>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Logo from '../icons/logo.png';
 import { RegisterIcon, LoginIcon } from '../icons/icons';
 import { Link } from 'react-router-dom';
@@ -39,22 +39,24 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
               </div>
             }
 
-            {/* <div className="items-center hidden space-x-8 lg:flex">
-              <Link to="/"
+            <div className="items-center hidden space-x-8 lg:flex">
+              <Link to="/upload"
                 className="flex text-gray-600 hover:text-blue-500
                             cursor-pointer transition-colors duration-300"
               >
-                Home
+                Upload
               </Link>
 
-              <Link
+              {/* <Link
                 className="flex text-gray-600 
                             cursor-pointer transition-colors duration-300
                             font-semibold text-blue-600"
               >
                 Themes
-              </Link>
-            </div> */}
+              </Link> */}
+            </div>
+
+
             {isLoggedIn === false ? (
               <div className="flex items-center space-x-5">
                 <Link

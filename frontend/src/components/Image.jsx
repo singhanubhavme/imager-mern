@@ -11,11 +11,11 @@ const Image = ({ img, setCommentAdded }) => {
       {
         !model ?
           <div className="flex w-1/3 flex-wrap">
-            <div className="w-full p-1 md:p-2">
+            <div className="w-full p-1 md:p-2 flex items-center transition duration-500 ease-in-out hover:scale-95 overflow-hidden cursor-pointer">
               <img
                 onClick={handleClick}
                 alt="gallery"
-                className="block h-full w-full rounded-lg object-cover object-center"
+                className="block rounded-lg object-cover object-center overflow-hidden"
                 src={img.url}
                 loading="lazy"
               />
