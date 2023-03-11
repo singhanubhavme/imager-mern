@@ -175,7 +175,73 @@ exports.deleteUser = async (req, res) => {
 };
 
 // only moderator
-exports.blockUser = async (req, res) => {};
+exports.blockUser = async (req, res) => {
+  try {
+    const { username } = req.body;
+    const user = await User.findOne({ userid: username });
+    if (user) {
+      const blocked = await User.updateOne(
+        { userid: username },
+        { blocked: true }
+      );
+      if (blocked.acknowledged) {
+        return res.status(RESPONSE_STATUS.SUCCESS).json({
+          response: RESPONSES.SUCCESS,
+          message: RESPONSE_MESSAGES.SUCCESS,
+        });
+      } else {
+        return res.status(RESPONSE_STATUS.ERROR).json({
+          response: RESPONSES.ERROR,
+          message: RESPONSE_MESSAGES.ERROR,
+        });
+      }
+    } else {
+      return res.status(RESPONSE_STATUS.ERROR).json({
+        response: RESPONSES.ERROR,
+        message: RESPONSE_MESSAGES.USER_NOT_FOUND,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(RESPONSE_STATUS.ERROR).json({
+      response: RESPONSES.ERROR,
+      message: RESPONSE_MESSAGES.USER_NOT_FOUND,
+    });
+  }
+};
 
 // only moderator
-exports.unblockUser = async (req, res) => {};
+exports.unblockUser = async (req, res) => {
+  try {
+    const { username } = req.body;
+    const user = await User.findOne({ userid: username });
+    if (user) {
+      const blocked = await User.updateOne(
+        { userid: username },
+        { blocked: false }
+      );
+      if (blocked.acknowledged) {
+        return res.status(RESPONSE_STATUS.SUCCESS).json({
+          response: RESPONSES.SUCCESS,
+          message: RESPONSE_MESSAGES.SUCCESS,
+        });
+      } else {
+        return res.status(RESPONSE_STATUS.ERROR).json({
+          response: RESPONSES.ERROR,
+          message: RESPONSE_MESSAGES.ERROR,
+        });
+      }
+    } else {
+      return res.status(RESPONSE_STATUS.ERROR).json({
+        response: RESPONSES.ERROR,
+        message: RESPONSE_MESSAGES.USER_NOT_FOUND,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(RESPONSE_STATUS.ERROR).json({
+      response: RESPONSES.ERROR,
+      message: RESPONSE_MESSAGES.USER_NOT_FOUND,
+    });
+  }
+};

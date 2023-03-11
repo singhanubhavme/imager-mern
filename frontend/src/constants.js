@@ -8,6 +8,8 @@ export const USER_URL = {
   getallusers: BASE_USER_API + '/getallusers/',
   getallmoderators: BASE_USER_API + '/getallmoderators/',
   deleteuser: BASE_USER_API + '/deleteuser/',
+  blockuser: BASE_USER_API + '/blockuser/',
+  unblockuser: BASE_USER_API + '/unblockuser/',
 };
 
 export const IMAGE_URL = {

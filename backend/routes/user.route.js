@@ -31,6 +31,18 @@ router
     verifyToken,
     isAdmin,
     UserController.deleteUser
+  )
+  .post(
+    '/blockuser/:userid',
+    verifyToken,
+    isModerator,
+    UserController.blockUser
+  )
+  .post(
+    '/unblockuser/:userid',
+    verifyToken,
+    isModerator,
+    UserController.unblockUser
   );
 
 module.exports = router;

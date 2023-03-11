@@ -7,6 +7,8 @@ import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
 import UploadImage from './components/UploadImage';
+import AdminDashboard from './components/AdminDashboard';
+import ModeratorDashboard from './components/ModeratorDashboard';
 import { ToastContainer } from 'react-toastify';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,6 +44,26 @@ const App = () => {
             path="/upload"
             element={
               <UploadImage
+                setIsLoggedIn={setIsLoggedIn}
+                isLoggedIn={isLoggedIn}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/admin"
+            element={
+              <AdminDashboard
+                setIsLoggedIn={setIsLoggedIn}
+                isLoggedIn={isLoggedIn}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/moderator"
+            element={
+              <ModeratorDashboard
                 setIsLoggedIn={setIsLoggedIn}
                 isLoggedIn={isLoggedIn}
               />
