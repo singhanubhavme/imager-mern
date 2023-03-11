@@ -1,13 +1,46 @@
 import { Fragment, useRef, useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import axios from 'axios';
 import Comment from './Comment';
-import { CloseIcon } from '../icons/icons';
+import { CloseIcon, DeleteIcon } from '../icons/icons';
 import Like from './Like';
+import { IMAGE_URL } from '../constants';
+import { showToast } from '../utils/showToast';
+import { useNavigate } from 'react-router-dom';
 
 const ImageModel = ({ img, setModel, setCommentAdded }) => {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(true);
     const cancelButtonRef = useRef(null);
     const [likes, setLikes] = useState(img.likes);
+
+    const handleDelete = async (e, img) => {
+        e.preventDefault();
+        const username = localStorage.getItem('username');
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.post(IMAGE_URL.deleteimage, {
+                id: img.imgId,
+                uploader: username,
+            }, {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+            if (response.status === 200) {
+                showToast('Image Deleted Successfully', 'success');
+                navigate('/');
+            } else {
+                showToast('Cannot Delete Image', 'fail');
+            }
+        } catch (err) {
+            console.log(err);
+            if (err.response.data.message === "You do not have enough privileges to perform this action") {
+                showToast('You cannot delete images uploaded by others', 'fail');
+            } else {
+                showToast('Cannot Delete Image', 'fail');
+            }
+        }
+    }
 
     useEffect(() => {
         open ? setModel(true) : setModel(false);
@@ -53,6 +86,12 @@ const ImageModel = ({ img, setModel, setCommentAdded }) => {
                                     </button>
 
                                     <div className="p-4">
+                                        <div className='flex flex-col items-center'>
+                                            <button className="flex px-3 py-2 bg-red-400 mr-1 text-white font-semibold rounded" onClick={(e) => handleDelete(e, img)}>
+                                                <DeleteIcon />
+                                                <span className="ml-1">Delete</span>
+                                            </button>
+                                        </div>
 
                                         <Like
                                             setLikes={setLikes}

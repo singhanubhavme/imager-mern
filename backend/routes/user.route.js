@@ -43,6 +43,7 @@ router
     verifyToken,
     isModerator,
     UserController.unblockUser
-  );
+  )
+  .post('/getrole', verifyToken, UserController.getRole);
 
 module.exports = router;

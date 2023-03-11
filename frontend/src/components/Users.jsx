@@ -98,10 +98,21 @@ const Users = ({ users, setUpdateUI }) => {
                         <td className="px-6 py-4">{user.role.toUpperCase()}</td>
 
                         <td className="px-6 py-4">
-                            <div className="flex justify-end gap-2 pr-2">
-                                <button onClick={(e) => handleBlock(e, user.userid)}>
-                                    {user.blocked ? 'Unblock' : 'Block'}
-                                </button>
+                            <div className="flex justify-center gap-2 pr-2 align-middle">
+                                <div className='flex flex-col items-center'>
+
+                                    {user.blocked ?
+                                        <button className="flex px-3 py-2 bg-green-400 mr-1 text-black rounded" onClick={(e) => handleBlock(e, user.userid)}>
+
+                                            <span className="text-center text-base">Unblock</span>
+                                        </button>
+                                        :
+                                        <button className="flex px-3 py-2 bg-red-400 mr-1 text-black rounded" onClick={(e) => handleBlock(e, user.userid)}>
+                                            <span className="text-center text-base">Block</span>
+                                        </button>
+                                    }
+
+                                </div>
                             </div>
                         </td>
                     </tr>

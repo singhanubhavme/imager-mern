@@ -31,7 +31,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
           setIsLoggedIn(true);
           setTimeout(() => {
             navigate('/');
-          }, 5500);
+          }, 3000);
         }
       } catch (err) {
         console.log(err);

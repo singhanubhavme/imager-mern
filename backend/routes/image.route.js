@@ -16,7 +16,7 @@ router
   .get('/getallimages', ImagesController.getAllImages)
   .get('/getimage/:id', ImagesController.getImageById)
   .get('/getimages/:userid', ImagesController.getImageByUserId)
-  .delete('/deleteimage', verifyToken, ImagesController.deleteImage)
+  .post('/deleteimage', verifyToken, ImagesController.deleteImage)
   .post('/likeimage', verifyToken, ImagesController.likeImage)
   .post('/commentonimage', verifyToken, ImagesController.commentOnImage)
   .post('/getuploader', ImagesController.getUploader);

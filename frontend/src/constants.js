@@ -10,6 +10,7 @@ export const USER_URL = {
   deleteuser: BASE_USER_API + '/deleteuser/',
   blockuser: BASE_USER_API + '/blockuser/',
   unblockuser: BASE_USER_API + '/unblockuser/',
+  getrole: BASE_USER_API + '/getrole',
 };
 
 export const IMAGE_URL = {

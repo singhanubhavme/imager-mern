@@ -245,3 +245,30 @@ exports.unblockUser = async (req, res) => {
     });
   }
 };
+
+exports.getRole = async (req, res) => {
+  const { username } = req.body;
+  try {
+    const user = await User.findOne({ userid: username });
+    if (user) {
+      return res.status(RESPONSE_STATUS.SUCCESS).json({
+        response: RESPONSES.SUCCESS,
+        message: RESPONSE_MESSAGES.SUCCESS,
+        data: {
+          role: user.role,
+        },
+      });
+    } else {
+      return res.status(RESPONSE_STATUS.ERROR).json({
+        response: RESPONSES.ERROR,
+        message: RESPONSE_MESSAGES.USER_NOT_FOUND,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(RESPONSE_STATUS.ERROR).json({
+      response: RESPONSES.ERROR,
+      message: err,
+    });
+  }
+};
