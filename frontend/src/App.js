@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
-import Register from './components/Register';
-import Login from './components/Login';
-import UploadImage from './components/UploadImage';
-import AdminDashboard from './components/AdminDashboard';
-import ModeratorDashboard from './components/ModeratorDashboard';
-import { ToastContainer } from 'react-toastify';
+import Register from './components/User/Register';
+import Login from './components/User/Login';
+import UploadImage from './components/Image/UploadImage';
+import AdminDashboard from './components/User/AdminDashboard';
+import ModeratorDashboard from './components/User/ModeratorDashboard';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

@@ -1,35 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Users from "./Users";
-import axios from "axios";
-import { USER_URL } from "../constants";
+import { getModerators } from "../../api/UserAPI";
 
-const AdminDashboard = ({ isLoggedIn, setIsLoggedIn }) => {
+const AdminDashboard = ({ isLoggedIn }) => {
     const [mods, setMods] = useState([]);
     const [updateUI, setUpdateUI] = useState(false);
 
-
     useEffect(() => {
-        (async () => {
-            const token = localStorage.getItem('token');
-            const username = localStorage.getItem('username');
-            try {
-                const response = await axios.post((USER_URL.getallmoderators + username), {}, {
-                    headers: { "Authorization": `Bearer ${token}` }
-                });
-                if (response.status === 200) {
-                    console.log(response.data.data.users);
-                    const mod = [];
-                    for (let i = 0; i < response.data.data.users.length; i++) {
-                        mod.push(response.data.data.users[i]);
-                    }
-                    setMods(mod);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        })();
+        getModerators(setMods);
     }, [updateUI]);
-
 
     return (
         isLoggedIn &&

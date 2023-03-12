@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ImageModel from "./ImageModel";
 
-const Image = ({ img, setCommentAdded }) => {
+const Image = ({ img, setUpdateUI }) => {
   const [model, setModel] = useState(false);
   const handleClick = () => {
     setModel(true);
@@ -22,7 +22,7 @@ const Image = ({ img, setCommentAdded }) => {
             </div>
           </div>
           :
-          <ImageModel img={img} setModel={setModel} setCommentAdded={setCommentAdded} />
+          <ImageModel img={img} setModel={setModel} setUpdateUI={setUpdateUI} />
       }
     </React.Fragment >
   )

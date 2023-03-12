@@ -21,4 +21,6 @@ export const IMAGE_URL = {
   deleteimage: BASE_IMAGE_API + '/deleteimage',
   likeimage: BASE_IMAGE_API + '/likeimage',
   commentonimage: BASE_IMAGE_API + '/commentonimage',
+  deletecomment: BASE_IMAGE_API + '/deletecomment',
+  getuploader: BASE_IMAGE_API + '/getuploader',
 };

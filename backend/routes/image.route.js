@@ -5,6 +5,7 @@ const ImagesController = require('../controllers/images.controller');
 const { verifyToken } = require('../middlewares/jwt.middleware');
 
 const upload = require('../utils/imageupload.util');
+const { isModerator } = require('../middlewares/user.middleware');
 
 router
   .post(
@@ -19,6 +20,7 @@ router
   .post('/deleteimage', verifyToken, ImagesController.deleteImage)
   .post('/likeimage', verifyToken, ImagesController.likeImage)
   .post('/commentonimage', verifyToken, ImagesController.commentOnImage)
+  .post('/deletecomment', verifyToken, ImagesController.deleteComment)
   .post('/getuploader', ImagesController.getUploader);
 
 module.exports = router;

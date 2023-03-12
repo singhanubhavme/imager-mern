@@ -1,5 +1,5 @@
 import React from 'react';
-import Images from './Images';
+import Images from './Image/Images';
 import './Home.css';
 
 const Home = ({ isLoggedIn }) => {

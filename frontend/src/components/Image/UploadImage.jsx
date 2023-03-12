@@ -1,16 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import { showToast } from '../utils/showToast';
-import { IMAGE_URL } from "../constants";
+import { handleImageSubmit } from "../../api/ImageAPI";
 
 const UploadImage = () => {
     const navigate = useNavigate();
     const imageRef = useRef();
     const [selectedImage, setSelectedImage] = useState(null);
     const [preview, setPreview] = useState(null);
-    const username = localStorage.getItem('username');
-    const token = localStorage.getItem('token');
     const [title, setTitle] = useState('');
 
     useEffect(() => {
@@ -34,34 +30,6 @@ const UploadImage = () => {
             return;
         }
         setSelectedImage(e.target.files[0])
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            let response = axios.post(IMAGE_URL.uploadimage, {
-                userid: username,
-                title: title,
-                image: selectedImage
-            },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        "Authorization": `Bearer ${token}`
-                    },
-                }
-            );
-            showToast('Please Wait, Image is being uploaded', 'info');
-            response = await response;
-            if (response.status === 200) {
-                showToast('Image Uploaded, Redirecting', 'success');
-                setTimeout(() => {
-                    navigate('/');
-                }, 3000);
-            }
-        } catch (err) {
-            showToast('Cannot upload Image, try again later', 'fail');
-        }
     }
 
     return (
@@ -104,7 +72,7 @@ const UploadImage = () => {
                             <span>File type: jpg, jpeg and png</span>
                         </p>
                         <div>
-                            <button type="submit" onClick={handleSubmit} className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
+                            <button type="submit" onClick={(e) => handleImageSubmit(e, title, selectedImage, navigate)} className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
                                     font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
                                 Upload
                             </button>

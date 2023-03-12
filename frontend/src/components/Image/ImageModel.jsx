@@ -1,46 +1,21 @@
 import { Fragment, useRef, useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import axios from 'axios';
 import Comment from './Comment';
-import { CloseIcon, DeleteIcon } from '../icons/icons';
+import { CloseIcon, DeleteIcon } from '../../icons/icons';
 import Like from './Like';
-import { IMAGE_URL } from '../constants';
-import { showToast } from '../utils/showToast';
-import { useNavigate } from 'react-router-dom';
+import { handleDeleteImage, handleDeleteComment } from '../../api/ImageAPI';
+import { getUploader } from '../../api/UserAPI';
 
-const ImageModel = ({ img, setModel, setCommentAdded }) => {
-    const navigate = useNavigate();
+const ImageModel = ({ img, setModel, setUpdateUI }) => {
     const [open, setOpen] = useState(true);
     const cancelButtonRef = useRef(null);
     const [likes, setLikes] = useState(img.likes);
+    const [uploader, setUploader] = useState('');
 
-    const handleDelete = async (e, img) => {
-        e.preventDefault();
-        const username = localStorage.getItem('username');
-        const token = localStorage.getItem('token');
+    useEffect(() => {
+        getUploader(img.imgId, setUploader);
+    }, [img.imgId, open]);
 
-        try {
-            const response = await axios.post(IMAGE_URL.deleteimage, {
-                id: img.imgId,
-                uploader: username,
-            }, {
-                headers: { "Authorization": `Bearer ${token}` },
-            });
-            if (response.status === 200) {
-                showToast('Image Deleted Successfully', 'success');
-                navigate('/');
-            } else {
-                showToast('Cannot Delete Image', 'fail');
-            }
-        } catch (err) {
-            console.log(err);
-            if (err.response.data.message === "You do not have enough privileges to perform this action") {
-                showToast('You cannot delete images uploaded by others', 'fail');
-            } else {
-                showToast('Cannot Delete Image', 'fail');
-            }
-        }
-    }
 
     useEffect(() => {
         open ? setModel(true) : setModel(false);
@@ -75,6 +50,7 @@ const ImageModel = ({ img, setModel, setCommentAdded }) => {
                         >
                             <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                                 <div className="mx-auto transform overflow-hidden rounded-lg bg-white">
+
                                     <img className="h-full w-full object-center" src={img.url} loading="lazy" alt="pic" />
 
                                     <button type="button" className="bg-gray-100 rounded-md p-1 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 absolute top-0 right-0 outline-none"
@@ -85,13 +61,11 @@ const ImageModel = ({ img, setModel, setCommentAdded }) => {
                                         <CloseIcon />
                                     </button>
 
+                                    <div className='flex flex-col items-left mt-3 ml-3'>
+                                        Uploaded By : {uploader}
+                                    </div>
+
                                     <div className="p-4">
-                                        <div className='flex flex-col items-center'>
-                                            <button className="flex px-3 py-2 bg-red-400 mr-1 text-white font-semibold rounded" onClick={(e) => handleDelete(e, img)}>
-                                                <DeleteIcon />
-                                                <span className="ml-1">Delete</span>
-                                            </button>
-                                        </div>
 
                                         <Like
                                             setLikes={setLikes}
@@ -110,6 +84,9 @@ const ImageModel = ({ img, setModel, setCommentAdded }) => {
                                                     <div key={comment} className="flex gap-3 space-y-1 pb-3">
                                                         <img src="https://www.pngmart.com/files/21/Admin-Profile-PNG-Clipart.png" className="rounded-full h-8 w-8" alt='profile pic' />
                                                         <span className="text-sm">{comment}</span>
+                                                        <button onClick={(e) => handleDeleteComment(e, img.imgId, comment, setUpdateUI)} className='ml-auto'>
+                                                            <DeleteIcon />
+                                                        </button>
                                                     </div>
                                                 );
                                             })
@@ -117,8 +94,14 @@ const ImageModel = ({ img, setModel, setCommentAdded }) => {
                                     </div>
                                 </div>
 
-                                <Comment imgId={img.imgId} setCommentAdded={setCommentAdded} />
+                                <Comment imgId={img.imgId} setUpdateUI={setUpdateUI} />
 
+                                <div className='flex flex-col items-center pb-4 pt-2'>
+                                    <button className="flex px-3 py-2 bg-red-400 mr-1 text-white font-semibold rounded" onClick={(e) => handleDeleteImage(e, img, setModel, setOpen, setUpdateUI)}>
+                                        <DeleteIcon />
+                                        <span className="ml-1">Delete</span>
+                                    </button>
+                                </div>
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>

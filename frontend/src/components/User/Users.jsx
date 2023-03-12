@@ -1,53 +1,16 @@
 import React from "react";
-import axios from "axios";
-import { USER_URL } from "../constants";
-import { showToast } from "../utils/showToast";
-
+import { blockUser, unblockUser } from "../../api/UserAPI";
 
 const Users = ({ users, setUpdateUI }) => {
-
-    const blockUser = async (user, username, token) => {
-        try {
-            const response = await axios.post(USER_URL.blockuser + user, { username: username }, {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            if (response.status === 200) {
-                showToast('User Blocked', 'success');
-                setUpdateUI(true);
-                setTimeout(() => {
-                    setUpdateUI(false);
-                }, 2000);
-            }
-        } catch (err) {
-            showToast('Cannot block User', 'fail');
-        }
-    }
-
-    const unblockUser = async (user, username, token) => {
-        try {
-            const response = await axios.post(USER_URL.unblockuser + user, { username: username }, {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            if (response.status === 200) {
-                showToast('User Unblocked', 'success');
-                setUpdateUI(true);
-                setTimeout(() => {
-                    setUpdateUI(false);
-                }, 2000);
-            }
-        } catch (err) {
-            showToast('Cannot unblock User', 'fail');
-        }
-    }
 
     const handleBlock = async (e, username) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('username');
         if (e.target.innerText === 'Block') {
-            await blockUser(user, username, token);
+            await blockUser(user, username, token, setUpdateUI);
         } else {
-            await unblockUser(user, username, token);
+            await unblockUser(user, username, token, setUpdateUI);
         }
     }
 

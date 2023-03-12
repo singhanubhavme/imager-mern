@@ -1,34 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { IMAGE_URL } from "../constants";
-import { showToast } from '../utils/showToast';
+import { submitComment } from "../../api/ImageAPI";
 
-const Comment = ({ imgId, setCommentAdded }) => {
+const Comment = ({ imgId, setUpdateUI }) => {
 
     const [comment, setComment] = useState('');
 
-    const submitComment = async (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.post(IMAGE_URL.commentonimage, {
-                id: imgId,
-                comment: comment
-            }, {
-                headers: { "Authorization": `Bearer ${token}` },
-            }
-            );
-            if (response.status === 200) {
-                showToast('Comment added Successfully', 'success');
-                setCommentAdded(true);
-                setTimeout(() => {
-                    setCommentAdded(false);
-                }, 1000);
-            }
-        } catch (err) {
-            showToast('Cannot add comment', 'fail');
-        }
-    }
     return (
         <div className="flex items-center justify-center shadow-lg mt-2 mb-2 w-full">
             <form className="w-full max-w-xl bg-white rounded-lg px-4 pt-2">
@@ -39,7 +15,11 @@ const Comment = ({ imgId, setCommentAdded }) => {
                     </div>
                     <div className="w-full md:w-full flex items-start md:w-full px-3 ">
                         <div className="-mr-1">
-                            <button type='submit' onClick={submitComment} className="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100"
+                            <button type='submit' onClick={(e) => {
+                                submitComment(e, setUpdateUI, imgId, comment);
+                                setComment('');
+                            }
+                            } className="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100"
                             >
                                 Post Comment
                             </button>

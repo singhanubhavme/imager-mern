@@ -2,8 +2,10 @@ const {
   RESPONSES,
   RESPONSE_STATUS,
   RESPONSE_MESSAGES,
+  ROLES,
 } = require('../constants/constants');
 const Image = require('../models/image.model');
+const User = require('../models/user.model');
 
 exports.uploadImage = async (req, res) => {
   try {
@@ -153,7 +155,13 @@ exports.deleteImage = async (req, res) => {
       });
     }
     const foundImg = await Image.findOne({ 'image._id': id });
-    if (foundImg.uploader === uploader) {
+    const role = await User.findOne({ userid: uploader });
+
+    if (
+      foundImg.uploader === uploader ||
+      role.role === ROLES.ADMIN ||
+      role.role === ROLES.MODERATOR
+    ) {
       await Image.updateOne(
         { 'image._id': id },
         {
@@ -294,4 +302,90 @@ exports.commentOnImage = async (req, res) => {
   }
 };
 
-exports.getUploader = async (req, res) => {};
+exports.getUploader = async (req, res) => {
+  try {
+    const { imgId } = req.body;
+    const Uploader = await Image.findOne({ 'image._id': imgId });
+    if (Uploader) {
+      return res.status(RESPONSE_STATUS.SUCCESS).json({
+        response: RESPONSES.SUCCESS,
+        message: RESPONSE_MESSAGES.SUCCESS,
+        data: {
+          uploader: Uploader.uploader,
+        },
+      });
+    } else {
+      return res.status(RESPONSE_STATUS.ERROR).json({
+        response: RESPONSES.ERROR,
+        message: RESPONSE_MESSAGES.NO_IMAGE_FOUND,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(RESPONSE_STATUS.ERROR).json({
+      response: RESPONSES.ERROR,
+      message: err,
+    });
+  }
+};
+
+exports.deleteComment = async (req, res) => {
+  try {
+    const { id, comment, username } = req.body;
+    if (!id || !comment || !username) {
+      return res.status(RESPONSE_STATUS.ERROR).json({
+        response: RESPONSES.ERROR,
+        message: RESPONSE_MESSAGES.MISSING_FIELDS,
+      });
+    }
+    const role = await User.findOne({ userid: username });
+
+    if (role.role !== ROLES.ADMIN && role.role !== ROLES.MODERATOR) {
+      return res.status(RESPONSE_STATUS.ERROR).json({
+        response: RESPONSES.ERROR,
+        message: RESPONSE_MESSAGES.ERROR,
+      });
+    }
+
+    const foundImg = await Image.findOne({ 'image._id': id });
+
+    let currentElement = null;
+    for (let i = 0; i < foundImg.image.length; i++) {
+      if (foundImg.image[i]._id.toString() === id) {
+        currentElement = foundImg.image[i];
+        break;
+      }
+    }
+    const index = currentElement.comment.indexOf(comment);
+    index > -1 ? currentElement.comment.splice(index, 1) : null;
+
+    if (currentElement !== null) {
+      await Image.updateOne(
+        { 'image._id': id },
+        {
+          $pull: {
+            image: { _id: id },
+          },
+        }
+      );
+      await Image.updateOne(
+        { uploader: foundImg.uploader },
+        {
+          $push: {
+            image: currentElement,
+          },
+        }
+      );
+      return res.status(RESPONSE_STATUS.SUCCESS).json({
+        response: RESPONSES.SUCCESS,
+        message: RESPONSE_MESSAGES.SUCCESS,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(RESPONSE_STATUS.ERROR).json({
+      response: RESPONSES.ERROR,
+      message: err,
+    });
+  }
+};

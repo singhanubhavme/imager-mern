@@ -2,41 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Logo from '../icons/logo.png';
 import { RegisterIcon, LoginIcon } from '../icons/icons';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
-import { USER_URL } from '../constants';
+import { getUserRole } from '../api/UserAPI';
 
 const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   const [isModerator, setIsModerator] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-
-  const getUserRole = async () => {
-    const username = localStorage.getItem('username');
-    const token = localStorage.getItem('token');
-    try {
-      const response = await axios.post(USER_URL.getrole, {
-        username: username
-      }, {
-        headers: { "Authorization": `Bearer ${token}` },
-      });
-      if (response.status === 200) {
-        if (response.data.data.role === 'moderator') {
-          setIsModerator(true);
-          setIsAdmin(false);
-        } else if (response.data.data.role === 'admin') {
-          setIsAdmin(true);
-          setIsModerator(false);
-        } else {
-          setIsModerator(false);
-          setIsAdmin(false);
-        }
-      } else {
-        console.log('Cannot get user role');
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
 
   useEffect(() => {
     if (localStorage.getItem('username') && localStorage.getItem('token')) {
@@ -46,7 +16,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
 
   useEffect(() => {
     if (isLoggedIn)
-      getUserRole();
+      getUserRole(setIsAdmin, setIsModerator);
   }, [isLoggedIn]);
 
   const Logout = () => {
@@ -69,7 +39,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
               </NavLink>
             </div>
 
-            <div className="items-center hidden space-x-8 lg:flex">
+            <div className="items-center space-x-8 flex sm:flex-column">
               <NavLink
                 style={({ isActive }) => ({ color: isActive ? 'rgb(29, 78, 216)' : '' })}
                 to="/"
