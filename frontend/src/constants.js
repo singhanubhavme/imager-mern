@@ -1,4 +1,4 @@
-export const API_DOMAIN = 'http://localhost:3001';
+export const API_DOMAIN = 'https://imager-35gw.onrender.com/';
 const BASE_USER_API = API_DOMAIN + '/api/user';
 const BASE_IMAGE_API = API_DOMAIN + '/api/image';
 
