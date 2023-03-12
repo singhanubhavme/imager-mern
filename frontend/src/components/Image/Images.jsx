@@ -35,7 +35,7 @@ const Images = () => {
       :
       <React.Fragment>
         <div className="text-center text-xl font-bold mt-5">
-          No Images Uploaded, Please Upload an image
+          Please Wait, while the Images load
         </div>
       </React.Fragment>
   );
