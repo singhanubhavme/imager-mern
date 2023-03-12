@@ -77,6 +77,12 @@ exports.login = async (req, res) => {
         message: RESPONSE_MESSAGES.INVALID_CREDENTIALS,
       });
     }
+    if (user.blocked) {
+      return res.status(RESPONSE_STATUS.ERROR).json({
+        response: RESPONSES.ERROR,
+        message: RESPONSE_MESSAGES.USER_BLOCKED,
+      });
+    }
     const token = createToken(userid);
     return res.status(RESPONSE_STATUS.SUCCESS).json({
       response: RESPONSES.SUCCESS,

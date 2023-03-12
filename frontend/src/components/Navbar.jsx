@@ -27,9 +27,9 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <>
       <div className="flex flex-col items-center justify-center mt-4">
-        <div className="flex flex-col">
+        <div className="flex flex-col w-screen">
           <nav
-            className="flex pb-4 bg-white/80 backdrop-blur-md shadow-md w-screen"
+            className="flex pb-4 bg-white/80 backdrop-blur-md shadow-md"
           >
             <div className="flex items-center">
               <NavLink to="/" className="cursor-pointer">

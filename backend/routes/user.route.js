@@ -35,13 +35,13 @@ router
   .post(
     '/blockuser/:userid',
     verifyToken,
-    isModerator,
+    isAdminOrModerator,
     UserController.blockUser
   )
   .post(
     '/unblockuser/:userid',
     verifyToken,
-    isModerator,
+    isAdminOrModerator,
     UserController.unblockUser
   )
   .post('/getrole', verifyToken, UserController.getRole);

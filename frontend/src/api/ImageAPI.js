@@ -101,7 +101,9 @@ export const handleLikeImage = async (e, img, setLikes, likes) => {
       showToast('Cannot Like Photo', 'fail');
     }
   } catch (err) {
-    showToast('You Needed to be logged in to like this image', 'fail');
+    if (err.response.data.message.indexOf('already') !== -1)
+      showToast('You Already have liked this photo', 'fail');
+    else showToast('You Needed to be logged in to like this image', 'fail');
   }
 };
 
@@ -192,10 +194,10 @@ export const handleDeleteComment = async (e, imgId, comment, setUpdateUI) => {
         setUpdateUI(false);
       }, 1000);
     } else {
-      showToast('Only Moderator can delete comments');
+      showToast('Only Moderator can delete comments', 'fail');
     }
   } catch (err) {
     console.log(err);
-    showToast('Only Moderator can delete comments');
+    showToast('Only Moderator can delete comments', 'fail');
   }
 };

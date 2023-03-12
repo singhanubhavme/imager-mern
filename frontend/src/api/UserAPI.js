@@ -26,19 +26,19 @@ export const handleLoginSubmit = async (
         const token = response.data.data.token;
         localStorage.setItem('token', token);
         localStorage.setItem('username', username);
-        showToast('User Logged in Successfully!!', 'success');
+        showToast('User Logged in Successfully!!, Redirecting', 'success');
         setIsLoggedIn(true);
         setTimeout(() => {
           navigate('/');
-        }, 3000);
+        }, 2000);
       }
     } catch (err) {
       console.log(err);
-      showToast('Cannot Login', 'error');
-      showToast(err.response.data.message, 'error');
+      showToast('Cannot Login', 'fail');
+      showToast(err.response.data.message, 'fail');
     }
   } else {
-    showToast('Please Check the inputs', 'error');
+    showToast('Please Check the inputs', 'fail');
   }
 };
 
@@ -62,7 +62,7 @@ export const handleRegisterSubmit = async (
     email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)
   ) {
     try {
-      const response = axios.post(
+      let response = axios.post(
         USER_URL.register,
         {
           name: name,
@@ -78,20 +78,20 @@ export const handleRegisterSubmit = async (
         }
       );
       showToast('Please Wait!!', 'info');
-      await response;
+      response = await response;
       if (response.status === 200) {
         showToast('User Registered Successfully!!', 'success');
         setTimeout(() => {
           navigate('/login');
-        }, 5500);
+        }, 2500);
       }
     } catch (err) {
       console.log(err);
-      showToast('Cannot Register User', 'error');
-      showToast(err.response.data.message, 'error');
+      showToast('Cannot Register User', 'fail');
+      showToast(err.response.data.message, 'fail');
     }
   } else {
-    showToast('Please Check the inputs', 'error');
+    showToast('Please Check the inputs', 'fail');
   }
 };
 
@@ -169,6 +169,28 @@ export const getUserRole = async (setIsAdmin, setIsModerator) => {
   }
 };
 
+export const getUsersRole = async (user) => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.post(
+      USER_URL.getrole,
+      {
+        username: user,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if (response.status === 200) {
+      return response.data.data.role;
+    } else {
+      console.log('Cannot get user role');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getModerators = async (setMods) => {
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
@@ -181,7 +203,6 @@ export const getModerators = async (setMods) => {
       }
     );
     if (response.status === 200) {
-      console.log(response.data.data.users);
       const mod = [];
       for (let i = 0; i < response.data.data.users.length; i++) {
         mod.push(response.data.data.users[i]);
@@ -217,7 +238,6 @@ export const getAllUsers = async (setUsers) => {
 export const getUploader = async (id, setUploader) => {
   try {
     const response = await axios.post(IMAGE_URL.getuploader, { imgId: id });
-    console.log(response);
     if (response.status === 200) {
       setUploader(response.data.data.uploader);
     }
