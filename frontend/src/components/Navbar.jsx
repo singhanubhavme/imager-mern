@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Logo from '../icons/logo.png';
 import { RegisterIcon, LoginIcon } from '../icons/icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { getUserRole } from '../api/UserAPI';
 
 const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
+  const navigate = useNavigate();
   const [isModerator, setIsModerator] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -22,6 +23,9 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   const Logout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
+    setTimeout(() => {
+      navigate('/');
+    }, 1000);
   };
 
   return (

@@ -20,6 +20,10 @@ app.use(cors({ origin: ORIGIN })); // secure true
 app.use('/api/user', userRoutes);
 app.use('/api/image', imageRoutes);
 
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 app.listen(PORT, (err) => {
   if (err) {
     console.log(`Can't listen on port ${PORT}`);
