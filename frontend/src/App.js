@@ -18,19 +18,11 @@ const App = () => {
       <Router>
         <Navbar setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
         <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              <Home setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
-            }
-          />
+          <Route exact path="/" element={<Home isLoggedIn={isLoggedIn} />} />
           <Route
             exact
             path="/register"
-            element={
-              <Register setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
-            }
+            element={<Register setIsLoggedIn={setIsLoggedIn} />}
           />
           <Route
             exact
@@ -39,35 +31,16 @@ const App = () => {
               <Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
             }
           />
-          <Route
-            exact
-            path="/upload"
-            element={
-              <UploadImage
-                setIsLoggedIn={setIsLoggedIn}
-                isLoggedIn={isLoggedIn}
-              />
-            }
-          />
+          <Route exact path="/upload" element={<UploadImage />} />
           <Route
             exact
             path="/admin"
-            element={
-              <AdminDashboard
-                setIsLoggedIn={setIsLoggedIn}
-                isLoggedIn={isLoggedIn}
-              />
-            }
+            element={<AdminDashboard isLoggedIn={isLoggedIn} />}
           />
           <Route
             exact
             path="/moderator"
-            element={
-              <ModeratorDashboard
-                setIsLoggedIn={setIsLoggedIn}
-                isLoggedIn={isLoggedIn}
-              />
-            }
+            element={<ModeratorDashboard isLoggedIn={isLoggedIn} />}
           />
         </Routes>
       </Router>
