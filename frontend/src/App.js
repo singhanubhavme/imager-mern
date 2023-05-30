@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -9,14 +9,15 @@ import Login from './components/User/Login';
 import UploadImage from './components/Image/UploadImage';
 import AdminDashboard from './components/User/AdminDashboard';
 import ModeratorDashboard from './components/User/ModeratorDashboard';
+import useAuthContext from './hooks/use-auth-hook';
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useAuthContext();
   return (
-    <React.Fragment>
+    <Fragment>
       <ToastContainer />
       <Router>
-        <Navbar setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+        <Navbar />
         <Routes>
           <Route exact path="/" element={<Home isLoggedIn={isLoggedIn} />} />
           <Route
@@ -44,7 +45,7 @@ const App = () => {
           />
         </Routes>
       </Router>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
